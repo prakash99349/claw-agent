@@ -12,7 +12,7 @@ from api.models import router as models_router
 from api.repo import router as repo_router
 from tools.registry import get_tools
 
-FRONTEND_DIR = os.path.join(os.path.dirname(__file__), "frontend_dist")
+FRONTEND_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "frontend_dist")
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
