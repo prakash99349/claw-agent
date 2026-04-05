@@ -1,29 +1,21 @@
 version: "3.9"
 
 services:
-  backend:
+  app:
     build:
       context: .
-      dockerfile: Dockerfile.backend
+      dockerfile: Dockerfile
+    container_name: claw-agent
+    restart: always
     ports:
       - "8000:8000"
-    env_file: .env
+    env_file:
+      - backend/.env
     volumes:
-      - ./backend:/app
-      - sessions_data:/app/data
-    restart: unless-stopped
-
-  frontend:
-    build:
-      context: .
-      dockerfile: Dockerfile.frontend
-    ports:
-      - "3000:3000"
-    environment:
-      - VITE_API_URL=http://localhost:8000
-    depends_on:
-      - backend
-    restart: unless-stopped
-
-volumes:
-  sessions_data:
+      - ./data:/app/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    depends_on: []
